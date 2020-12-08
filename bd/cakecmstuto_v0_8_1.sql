@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  ven. 23 oct. 2020 à 00:41
+-- Généré le :  ven. 04 déc. 2020 à 19:23
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `cakecmstuto_v0_6_1`
+-- Base de données :  `cakecmstuto_v0_8_1`
 --
 
 -- --------------------------------------------------------
@@ -54,7 +54,8 @@ INSERT INTO `articles` (`id`, `user_id`, `obec_city_id`, `title`, `slug`, `body`
 (10, 1, 3998, 'Test d\'article toutes étiquettes', 'Tags-test-article-all', 'Un article avec toutes les étiquettes', 1, '2020-09-27 17:26:25', '2020-09-27 18:54:11'),
 (12, 1, 3998, 'Test d\'article une étiquette', 'Tags-test-article-one', 'Un article avec une étiquette', 1, '2020-09-27 18:41:54', '2020-09-27 18:53:26'),
 (13, 1, 3998, 'Article with image', 'Article-with-image', 'Associate an image to the article', 1, '2020-09-28 01:51:45', '2020-09-28 01:51:45'),
-(14, 2, 3999, 'Essaie d\'ajout de Obec_City', 'Essaie-d-ajout-de-Obec-City', 'Article de la ville de Prachatice', 1, '2020-10-22 21:17:09', '2020-10-22 21:17:09');
+(14, 2, 3999, 'Essaie d\'ajout de Obec_City', 'Essaie-d-ajout-de-Obec-City', 'Article de la ville de Prachatice', 1, '2020-10-22 21:17:09', '2020-10-22 21:17:09'),
+(15, 2, 3999, 'Autocomplete test', 'Autocomplete-test', 'Avec la ville Prachatice', 1, '2020-10-23 17:18:28', '2020-10-23 17:18:28');
 
 -- --------------------------------------------------------
 
@@ -228,7 +229,8 @@ INSERT INTO `kraj_regions` (`id`, `kod`, `nazev`) VALUES
 (11, 'CZ042', 'Ústecký kraj'),
 (12, 'CZ072', 'Zlínský kraj'),
 (13, 'CZ032', 'Plzeňský kraj'),
-(14, 'CZ010', 'Hlavní město Praha');
+(14, 'CZ010', 'Hlavní město Praha'),
+(28, 'CA008', 'Lavalsky Kraj');
 
 -- --------------------------------------------------------
 
@@ -6503,7 +6505,9 @@ INSERT INTO `obec_cities` (`id`, `kraj_region_id`, `okres_county_id`, `kod`, `na
 (6248, 9, 50, '541575', 'Žulová'),
 (6249, 6, 58, '572641', 'Žumberk'),
 (6250, 3, 33, '562424', 'Županovice'),
-(6251, 2, 60, '564338', 'Županovice');
+(6251, 2, 60, '564338', 'Županovice'),
+(6252, 8, 10, '999999', 'Essai listes liées'),
+(6253, 28, 78, '012345', 'Ste-Rose');
 
 -- --------------------------------------------------------
 
@@ -6599,7 +6603,8 @@ INSERT INTO `okres_counties` (`id`, `kraj_region_id`, `kod`, `nazev`) VALUES
 (74, 7, 'CZ0806', 'Ostrava-město'),
 (75, 11, 'CZ0427', 'Ústí nad Labem'),
 (76, 13, 'CZ0323', 'Plzeň-město'),
-(77, 14, 'CZ0100', 'Praha');
+(77, 14, 'CZ0100', 'Praha'),
+(78, 28, 'CA0804', 'Vimont');
 
 -- --------------------------------------------------------
 
@@ -6631,10 +6636,11 @@ INSERT INTO `tags` (`id`, `title`, `created`, `modified`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `confirmed` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -6643,10 +6649,11 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `uuid`, `confirmed`, `created`, `modified`) VALUES
-(1, 'cakephp@example.com', '$2y$10$iBI.6gNPxKfepjyRSDOcweqT6p6Tkf.ZkNsbIKn9AKkQvjWcvu/42', '7ffcb25d-16df-419a-9363-a5d6bdbdb0d0', 0, '2020-08-30 12:25:57', '2020-09-29 16:28:39'),
-(2, 'admin@admin.com', '$2y$10$AQvpqlMoXhHtjad/4RsVyOw9Epw7XVmltfCDavvzICJd1AFIeYVda', '207d7070-3653-473a-bbcb-6ba835ce605b', 0, '2020-09-09 22:05:30', '2020-09-29 16:28:45'),
-(7, 'apilon@cmontmorency.qc.ca', '$2y$10$JUFdTWjGMWsdDd4fDmSpQOugxMJSumERgCMRChYe.jHiI9rCjd70S', '29a3fc66-4349-423d-b7a2-57324b94e9cb', 1, '2020-09-29 18:25:02', '2020-09-29 18:25:54');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `uuid`, `active`, `created`, `modified`) VALUES
+(1, 'cakephp', 'cakephp@example.com', '$2y$10$iBI.6gNPxKfepjyRSDOcweqT6p6Tkf.ZkNsbIKn9AKkQvjWcvu/42', '7ffcb25d-16df-419a-9363-a5d6bdbdb0d0', 1, '2020-08-30 12:25:57', '2020-09-29 16:28:39'),
+(2, 'admin', 'admin@admin.com', '$2y$10$AQvpqlMoXhHtjad/4RsVyOw9Epw7XVmltfCDavvzICJd1AFIeYVda', '207d7070-3653-473a-bbcb-6ba835ce605b', 1, '2020-09-09 22:05:30', '2020-09-29 16:28:45'),
+(7, 'apilon', 'apilon@cmontmorency.qc.ca', '$2y$10$JUFdTWjGMWsdDd4fDmSpQOugxMJSumERgCMRChYe.jHiI9rCjd70S', '29a3fc66-4349-423d-b7a2-57324b94e9cb', 1, '2020-09-29 18:25:02', '2020-09-29 18:25:54'),
+(8, 'andre', 'andre@andre.me', '$2y$10$Hpz5vMzKSy6jjnZAYFSiceTWT.7iqN.m57bmP4kiKJlpOR4zsYHw2', '9636fc6c-89ef-4976-a6fc-fb15c4a05325', 1, '2020-12-03 20:01:21', '2020-12-04 17:53:38');
 
 --
 -- Index pour les tables déchargées
@@ -6739,7 +6746,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `articles`
 --
 ALTER TABLE `articles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `articles_files`
@@ -6769,19 +6776,19 @@ ALTER TABLE `i18n`
 -- AUTO_INCREMENT pour la table `kraj_regions`
 --
 ALTER TABLE `kraj_regions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID kraj_regione', AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID kraj_regione', AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pour la table `obec_cities`
 --
 ALTER TABLE `obec_cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID obce', AUTO_INCREMENT=6252;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID obce', AUTO_INCREMENT=6254;
 
 --
 -- AUTO_INCREMENT pour la table `okres_counties`
 --
 ALTER TABLE `okres_counties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID okres_countyu', AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID okres_countyu', AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT pour la table `tags`
@@ -6793,7 +6800,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Contraintes pour les tables déchargées
